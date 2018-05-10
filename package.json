@@ -11,7 +11,7 @@
     "first-element:start": "ng serve --project my-first-element",
     "first-element:build": "ng build --prod --project my-first-element --output-hashing=none",
     "first-element:bundle-standalone": "cat dist/my-first-element/{runtime,polyfills,scripts,main}.js > dist/my-first-element/my-first-element-ng.js",
-    "copy:element":""
+    "first-element:bundle-ng": "cat dist/my-first-element/{runtime,main}.js > dist/my-first-element/my-first-element-ng.js"
   },
   "private": true,
   "dependencies": {

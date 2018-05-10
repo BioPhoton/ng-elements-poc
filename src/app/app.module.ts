@@ -17,12 +17,18 @@ import {AppComponent} from './app.component';
 export class AppModule {
 
   constructor() {
-    const scriptTag = document
-      .createElement(`script`);
-    scriptTag.setAttribute('src', 'assets/ng-elements/my-first-element-ng.js');
-    scriptTag.setAttribute('type', 'text/javascript');
+    const bundles = ['my-first-element-ng', 'my-other-element-ng'];
 
-    document.body.appendChild(scriptTag);
+    bundles
+      .forEach(name => document.body.appendChild(this.getScriptTag(name)));
+
+  }
+
+  getScriptTag(fileName: string) {
+    document
+      .createElement(`script`);
+    scriptTag.setAttribute('src', `assets/elements/${fileName}.js`);
+    scriptTag.setAttribute('type', 'text/javascript');
   }
 
 }

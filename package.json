@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "first-element:start": "ng serve --project my-first-element",
+    "first-element:build": "ng build --prod --project my-first-element --output-hashing=none"
   },
   "private": true,
   "dependencies": {

@@ -22,13 +22,13 @@ The cli will install some packages to your `package.json`:
 // package.json
 
 {
-... 
+[...] 
   depenencies: {
-    ...
+    [...]
     "@angular/elements": "^6.0.0",
     "document-register-element": "^1.7.2"
   }
-...
+[...]
 }
 ```
 
@@ -38,20 +38,20 @@ And add a script to your projects scripts config in `angular.json`:
 // angular.json
 
 {
-...
+[...]
   "projects": {
     "ng-elements-poc": {
-    ...
+    [...]
       "scripts": [
         {
           "input": "node_modules/document-register-element/build/document-register-element.js"
         }
       ],
-      ...
+      [...]
     },
-    ...
+    [...]
   },
-  ...
+  [...]
 }
 ```
 
@@ -68,21 +68,21 @@ Run `ng generate application my-first-element` in the console.
 // angular.json
 
 {
-...
+[...]
   "projects": {
-    ...
+    [...]
     "my-first-element": {
-    ...
+    [...]
       "scripts": [
         {
           "input": "node_modules/document-register-element/build/document-register-element.js"
         }
       ],
-      ...
+      [...]
     },
-    ...
+    [...]
   },
-  ...
+  [...]
 }
 ```
 
@@ -94,12 +94,12 @@ Run `ng generate application my-first-element` in the console.
 // package.json
 
 {
-  ... 
+  [...] 
   scripts: {
-  ...
+  [...]
    "first-element:start": "ng serve --project my-first-element",
   },
-  ...
+  [...]
 }
 ```
 
@@ -113,12 +113,12 @@ Run `ng generate application my-first-element` in the console.
 // package.json
 
 {
-  ... 
+  [...] 
   scripts: {
-  ...
+  [...]
    "first-element:build": "ng build --prod --project my-first-element --output-hashing=none"
   },
-  ...
+  [...]
 }
 ```
 
@@ -171,11 +171,11 @@ import { FirstElementComponent } from './first-element/first-element.component';
 ```
 // projects/my-first-element/src/app/app.module.ts
 
-import {Injector, ...} from '@angular/core';
+import {Injector, [...]} from '@angular/core';
 import {createCustomElement, NgElementConfig} from '@angular/elements';
 
 @NgModule({
-... 
+[...] 
 })
 export class AppModule {
   constructor(private injector: Injector) {
@@ -198,7 +198,7 @@ export class AppModule {
 ```html
 <!-- projects/my-first-element/src/index.html --> 
 
-...
+[...]
 <body>
   <!-- vvv REMOVE vvv
   <app-root></app-root>
@@ -218,7 +218,7 @@ Let's introduce the `bundle-standalone` script.
 // package.json
 
 {
-  ...
+  [...]
   "first-element:bundle-standalone": "cat dist/my-first-element/{runtime,polyfills,scripts,main}.js > dist/my-first-element/my-first-element-standalone.js",
 }
 ```
@@ -234,7 +234,7 @@ Let's introduce the `bundle-standalone` script.
 // package.json
 
 {
-  ...
+  [...]
   "first-element:bundle-ng": "cat dist/my-first-element/{runtime,main}.js > dist/my-first-element/my-first-element-ng.js",
 }
 ```
@@ -284,7 +284,7 @@ export class AppModule {
 ```html
 <!-- src/app/app.component.html -->
 
-...
+[...]
 <app-first-element></app-first-element>
 ```
 
@@ -302,7 +302,7 @@ Let's start with **b** multiple elements in a different bundle.
 // package.json
 
 {
-  ...
+  [...]
   "first-element:copy-bundle": "cat dist/my-first-element/my-first-element-ng.js > src/assets/elements/my-first-element-ng.js",
   "other-element:copy-bundle": "cat dist/my-other-element/my-other-element-ng.js > src/assets/elements/my-other-element-ng.js",
   "copy-bundles": "npm run first-element:copy-bundle && npm run other-element:copy-bundle"
@@ -338,7 +338,7 @@ Let's start with **b** multiple elements in a different bundle.
 ```html
 <!-- src/app/app.component.html -->
 
-...
+[...]
 <app-other-element></app-other-element>
 ```
 
@@ -360,7 +360,7 @@ It will fail in IE/Edge.
 
 ```json
 {
-  ...
+  [...]
   // vvvv REMOVE vvvv
   "scripts": [
     {

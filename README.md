@@ -1,6 +1,6 @@
 # Angular Elements Build Setup
 
-The dev-kit has a package available for building webcomponents with angular. 
+The dev-kit has a package available for building web components with angular. 
 You can use the `@angular/elements` package for this. 
 Here you can follow a step by step setup for angular elements running standalone or in another angular app.
 
@@ -20,6 +20,7 @@ The cli will install some packages to your `package.json`:
 
 ```json
 // package.json
+
 {
 ... 
   depenencies: {
@@ -35,6 +36,7 @@ And add a script to your projects scripts config in `angular.json`:
 
 ```json
 // angular.json
+
 {
 ...
   "projects": {
@@ -58,12 +60,13 @@ And add a script to your projects scripts config in `angular.json`:
 ## Setup application for standalone web component
 
 1. Generate a new project in which we can test an elements setup.
-Run `ng generate application my-first-elements` in the console.
+Run `ng generate application my-first-element` in the console.
 
 2. Copy the script in your `angular.json` (mentioned in step `Setup WebComponents:1.`) from project `ng-elements-poc` to `my-first-element` scripts:  
 
 ```json
 // angular.json
+
 {
 ...
   "projects": {
@@ -88,6 +91,8 @@ Run `ng generate application my-first-elements` in the console.
 4. Setup a script in your `package.json` to start the `my-first-element` application:
 
 ```json
+// package.json
+
 {
   ... 
   scripts: {
@@ -105,6 +110,8 @@ Run `ng generate application my-first-elements` in the console.
    Note that we set the flag `output-hashing` to `none` to have the bundles always with the same file names.
 
 ```json
+// package.json
+
 {
   ... 
   scripts: {
@@ -146,6 +153,8 @@ We have setup a new project to test standalone web components. Now lets create o
 4. In `app.module.ts` remove the empty settings and add `FirstElementComponent` to the `entryComponents`
 
 ```typescript
+// projects/my-first-element/src/app/app.module.ts
+
 import { FirstElementComponent } from './first-element/first-element.component';
 
 @NgModule({
@@ -160,6 +169,8 @@ import { FirstElementComponent } from './first-element/first-element.component';
 5. Implement the bootstrapping logic for your component.
 
 ```
+// projects/my-first-element/src/app/app.module.ts
+
 import {Injector, ...} from '@angular/core';
 import {createCustomElement, NgElementConfig} from '@angular/elements';
 
@@ -175,18 +186,174 @@ export class AppModule {
     const config: NgElementConfig = {injector: this.injector};
     const ngElement = createCustomElement(FirstElementComponent, config);
 
-    customElements.define('first-element', ngElement);
+    customElements.define('app-first-element', ngElement);
   }
 
 }
 ```
 
-3. In your `index.html` replace ```html<app-root></app-root>``` with ```html<first-element></first-element>```
+3. In your `index.html` replace `<app-root></app-root>` with `<app-first-element></app-first-element>`:
+
+
+```html
+<!-- projects/my-first-element/src/index.html --> 
+
+...
+<body>
+  <!-- vvv REMOVE vvv
+  <app-root></app-root>
+  vvv ADD vvv -->
+  <app-first-element></app-first-element>
+</body>
+</html>
+``` 
 
 4. Test your web component. 
 Run `npm run first-element:start`
 
-## Setup for IE
+5. You can also setup a new script in `package.json` to bundle the files to use your web component in another place.
+Let's introduce the `bundle-standalone` script. 
+
+```json
+// package.json
+
+{
+  ...
+  "first-element:bundle-standalone": "cat dist/my-first-element/{runtime,polyfills,scripts,main}.js > dist/my-first-element/my-first-element-standalone.js",
+}
+```
+
+6. Run `npm run first-element:bundle-standalone` in the console to test it.
+
+
+# Test web component in another angular app
+
+1. Setup new script in `package.json` to bundle the files for another angular project
+
+```json
+// package.json
+
+{
+  ...
+  "first-element:bundle-ng": "cat dist/my-first-element/{runtime,main}.js > dist/my-first-element/my-first-element-ng.js",
+}
+```
+
+2. Run `npm run first-element:bundle-ng` in the console to test it.
+
+3. Copy `dist/my-first-element/my-first-element-ng.js` into 
+`src/assets/ng-elements` to serve this file as an asset of your root project.
+
+4. In your root application `ng-elements-poc` open `app.module.ts`
+
+Add the following to your ngModule decorator:
+
+```
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+```
+
+And insert following code to `AppModule` constructor
+
+```typescript
+export class AppModule {
+
+  constructor() {
+    const scriptTag = document
+          .createElement(`script`);
+        scriptTag.setAttribute('src', 'assets/elements/my-first-element-ng.js');
+        scriptTag.setAttribute('type', 'text/javascript');
+
+    document.body.appendChild(scriptTag);
+  }
+
+}
+```
+
+5. Add the html tag into your `app.component.html`
+```html
+<!-- src/app/app.component.html -->
+
+...
+<app-first-element></app-first-element>
+```
+
+# Using multiple element bundles in one app
+
+Test test if we can use multiple elements we can test **a** multiple elements in the same bundle and **b** multiple elements in different bundles.
+
+Let's start with **b** multiple elements in a different bundle.
+
+1. Create a new project name `my-other-element`. Do this by following the steps from [Setup application for standalone web component]() and [Create component and bootstrapping]()
+
+2. Create npm scripts for copying the files over into `src/assets/elements`
+
+```json
+// package.json
+
+{
+  ...
+  "first-element:copy-bundle": "cat dist/my-first-element/my-first-element-ng.js > src/assets/elements/my-first-element-ng.js",
+  "other-element:copy-bundle": "cat dist/my-other-element/my-other-element-ng.js > src/assets/elements/my-other-element-ng.js",
+  "copy-bundles": "npm run first-element:copy-bundle && npm run other-element:copy-bundle"
+}
+```
+
+2. In your root application `ng-elements-poc` open `app.module.ts`
+   
+   Refactor the creation of the script into a separate function:
+   
+   ```typescript
+   export class AppModule {
+   
+     constructor() {
+       const bundles = ['my-first-element-ng', 'my-other-element-ng'];
+       
+       bundles
+        .forEach(name => document.body.appendChild(this.getScriptTag(name)));
+      
+     }
+     
+     getScriptTag(fileName: string) {
+       document
+          .createElement(`script`);
+          scriptTag.setAttribute('src', `assets/elements/${fileName}.js`);
+          scriptTag.setAttribute('type', 'text/javascript');
+     }
+   
+   }
+   ```
+ 
+5. Add the html tag into your `app.component.html`
+```html
+<!-- src/app/app.component.html -->
+
+...
+<app-other-element></app-other-element>
+```
+
+
+6. Test it. Run following commands:
+
+```
+npm run first-element:build
+npm run first-element:bundle-ng
+npm run other-element:build
+npm run other-element:bundle-ng
+npm run copy-bundles
+```
+
+## Setup for IE !!! In progress !!!
 
 1. In your `angular.json` remove the a scripts your `my-elements` `scripts` section. 
 It will fail in IE/Edge. 
@@ -210,81 +377,4 @@ It will fail in IE/Edge.
 ```typescript
 import '@webcomponents/custom-elements/custom-elements.min.js';
 import '@webcomponents/custom-elements/src/native-shim.js'
-```
-
-# Test web component in another angular app
-
-## Tooling
-
-1. Copy your `my-elements` polyfill file and name it `polyfills.standalone.ts`.
-
-2. In `polyfills.ts` remove the polyfill for `zone.js`
-
-```typescript
-// vvv REMOVE vvv
-// import 'zone.js/dist/zone';  // Included with Angular CLI.
-```
-
-3. In your `angular.json` in `projects` copy the whole `my-elements` part and rename it to `my-elements-standalone`
-Under polyfills use the `polyfills.standalone.ts` instead of `polyfills.ts`
-```json
-{
-  "projects": {
-    "my-elements-standalone" : {
-      ...
-      "architect": {
-        "build": {
-          ... 
-          "options": {
-            "polyfills": "projects/elements/src/polyfills.standalone.ts",
-            ... 
-           }
-        }
-      }
-    }
-  }
-}
-```
-  
-3. Setup new script in `package.json` to build the standalone version
-
-```json
-  ... 
-  "element:build:standalone": "ng build --project=my-elements-standalone --prod --output-hashing=none",
-```
-
-4. Setup new script in `package.json` to bundle the files compiled files from the build into one
-
-```json
-{
-  ...
-  "element:build:standalone": "ng build --project=elements-standalone --prod --output-hashing=none"
-}
-```
-
-5. Run `npm run element:bundle` in the console to test it
-
-
-## Implementation
-
-1. Copy `elements.js` into the assets folder.
-
-2. 
-
-2. In your root application `ng-elements-poc` open `app.module.ts`
-Insert following code to `AppModule`
-
-```typescript
-export class AppModule {
-
-  constructor() {
-    const scriptTag = document
-          .createElement(`script`);
-        scriptTag.setAttribute('src', 'assets/elements/elements.js');
-        scriptTag.setAttribute('type', 'text/javascript');
-
-    document.body.appendChild(scriptTag);
-  }
-
-}
 ```

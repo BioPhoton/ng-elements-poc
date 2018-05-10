@@ -12,11 +12,11 @@
     "first-element:build": "ng build --prod --project my-first-element --output-hashing=none",
     "first-element:bundle-standalone": "cat dist/my-first-element/{runtime,polyfills,scripts,main}.js > dist/my-first-element/my-first-element-ng.js",
     "first-element:bundle-ng": "cat dist/my-first-element/{runtime,main}.js > dist/my-first-element/my-first-element-ng.js",
-    "first-element:copy-bundle": "cat dist/my-first-element/my-first-element-ng.js > src/assets/elements/my-first-element-ng.js",
+    "first-element:copy-bundle": "cat dist/my-first-element/my-first-element-ng.js > src/assets/ng-elements/my-first-element-ng.js",
     "other-element:start": "ng serve --project my-other-element",
     "other-element:build": "ng build --prod --project my-other-element --output-hashing=none",
     "other-element:bundle-ng": "cat dist/my-other-element/{runtime,main}.js > dist/my-other-element/my-other-element-ng.js",
-    "other-element:copy-bundle": "cat dist/my-other-element/my-other-element-ng.js > src/assets/elements/my-other-element-ng.js",
+    "other-element:copy-bundle": "cat dist/my-other-element/my-other-element-ng.js > src/assets/ng-elements/my-other-element-ng.js",
     "copy-bundles": "npm run first-element:copy-bundle && npm run other-element:copy-bundle"
   },
   "private": true,

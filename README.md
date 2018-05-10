@@ -4,7 +4,6 @@ The dev-kit has a package available for building web components with angular.
 You can use the `@angular/elements` package for this. 
 Here you can follow a step by step setup for angular elements running standalone or in another angular app.
 
-
 ## Setup a new project
 
 1. Create a new project. Run `ng new ng-elements-poc` in the console.
@@ -303,8 +302,8 @@ Let's start with **b** multiple elements in a different bundle.
 
 {
   [...]
-  "first-element:copy-bundle": "cat dist/my-first-element/my-first-element-ng.js > src/assets/elements/my-first-element-ng.js",
-  "other-element:copy-bundle": "cat dist/my-other-element/my-other-element-ng.js > src/assets/elements/my-other-element-ng.js",
+  "first-element:copy-bundle": "cat dist/my-first-element/my-first-element-ng.js > src/assets/ng-elements/my-first-element-ng.js",
+  "other-element:copy-bundle": "cat dist/my-other-element/my-other-element-ng.js > src/assets/ng-elements/my-other-element-ng.js",
   "copy-bundles": "npm run first-element:copy-bundle && npm run other-element:copy-bundle"
 }
 ```
@@ -324,13 +323,16 @@ Let's start with **b** multiple elements in a different bundle.
       
      }
      
-     getScriptTag(fileName: string) {
-       document
+     getScriptTag(fileName: string): HTMLElement {
+        const scriptTag = document
           .createElement(`script`);
-          scriptTag.setAttribute('src', `assets/elements/${fileName}.js`);
-          scriptTag.setAttribute('type', 'text/javascript');
+    
+        scriptTag.setAttribute('src', `assets/ng-elements/${fileName}.js`);
+        scriptTag.setAttribute('type', 'text/javascript');
+    
+        return scriptTag;
      }
-   
+      
    }
    ```
  
@@ -341,7 +343,6 @@ Let's start with **b** multiple elements in a different bundle.
 [...]
 <app-other-element></app-other-element>
 ```
-
 
 6. Test it. Run following commands:
 

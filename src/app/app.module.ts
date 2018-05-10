@@ -24,11 +24,14 @@ export class AppModule {
 
   }
 
-  getScriptTag(fileName: string) {
-    document
+  getScriptTag(fileName: string): HTMLElement {
+    const scriptTag = document
       .createElement(`script`);
-    scriptTag.setAttribute('src', `assets/elements/${fileName}.js`);
+
+    scriptTag.setAttribute('src', `assets/ng-elements/${fileName}.js`);
     scriptTag.setAttribute('type', 'text/javascript');
+
+    return scriptTag;
   }
 
 }

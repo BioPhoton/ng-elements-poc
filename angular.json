@@ -120,6 +120,120 @@
           }
         }
       }
+    },
+    "my-first-element": {
+      "root": "projects/my-first-element/",
+      "sourceRoot": "projects/my-first-element/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/my-first-element",
+            "index": "projects/my-first-element/src/index.html",
+            "main": "projects/my-first-element/src/main.ts",
+            "polyfills": "projects/my-first-element/src/polyfills.ts",
+            "tsConfig": "projects/my-first-element/tsconfig.app.json",
+            "assets": [
+              "projects/my-first-element/src/favicon.ico",
+              "projects/my-first-element/src/assets"
+            ],
+            "styles": [
+              "projects/my-first-element/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/my-first-element/src/environments/environment.ts",
+                  "with": "projects/my-first-element/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "my-first-element:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "my-first-element:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "my-first-element:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/my-first-element/src/test.ts",
+            "polyfills": "projects/my-first-element/src/polyfills.ts",
+            "tsConfig": "projects/my-first-element/tsconfig.spec.json",
+            "karmaConfig": "projects/my-first-element/karma.conf.js",
+            "styles": [
+              "projects/my-first-element/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/my-first-element/src/favicon.ico",
+              "projects/my-first-element/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/my-first-element/tsconfig.app.json",
+              "projects/my-first-element/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "my-first-element-e2e": {
+      "root": "projects/my-first-element-e2e/",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/my-first-element-e2e/protractor.conf.js",
+            "devServerTarget": "my-first-element:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/my-first-element-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ng-elements-poc"

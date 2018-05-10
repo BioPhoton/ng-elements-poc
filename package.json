@@ -10,7 +10,8 @@
     "e2e": "ng e2e",
     "first-element:start": "ng serve --project my-first-element",
     "first-element:build": "ng build --prod --project my-first-element --output-hashing=none",
-    "first-element:bundle": "cat dist/my-first-element/{runtime,polyfills,main}.js > dist/my-first-element/my-first-element-standalone.js"
+    "first-element:bundle-standalone": "cat dist/my-first-element/{runtime,polyfills,scripts,main}.js > dist/my-first-element/my-first-element-ng.js",
+    "copy:element":""
   },
   "private": true,
   "dependencies": {
